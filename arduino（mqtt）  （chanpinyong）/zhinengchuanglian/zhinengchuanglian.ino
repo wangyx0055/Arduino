@@ -1,12 +1,9 @@
-#include <RCSwitch.h>   //315MHz遥控库
-
-RCSwitch mySwitch = RCSwitch();
 unsigned long lastConnectionTime = 0;
 const unsigned long postingInterval = 30000;
 boolean ResponseBegin = false;
 String returnValue = "";
 String a = ""; 
-int kaiGuan , yaoKong;
+int kaiGuan , yaoKong,tingZhi;
 char string[100];
 char seps[]   = ":,";
 char *token; 
@@ -14,8 +11,10 @@ char *token;
 void setup() {    //设置单片机初始状态
   // put your setup code here, to run once:
     Serial.begin(9600);
-    mySwitch.enableTransmit(10);  //data脚必须接到单片机pin10
-    mySwitch.setRepeatTransmit(5);  
+    pinMode(3,OUTPUT);
+    pinMode(4,OUTPUT);
+    digitalWrite(3, HIGH); 
+    digitalWrite(4, HIGH); 
 	getData();
 }
 
@@ -59,14 +58,38 @@ if (returnValue.length()!=0 && (ResponseBegin == false)){
             token = strtok( NULL, seps );
             a = token;
             yaoKong = atoi(token);      
-            if(yaoKong == 1 ){                //根据指令发送相应的红外码，遥控电器
-               mySwitch.send(7047682, 24);  
+            switch(yaoKong ){                //根据指令发送相应的红外码，遥控电器
+               case 1:
+                digitalWrite(3, LOW);
+                delay(1000); 
+                digitalWrite(3, HIGH); 
+                yaoKong = 0;
+                tingZhi = 1;
+                break;
+               case 2:
+                digitalWrite(4, LOW);
+                delay(1000); 
+                digitalWrite(4, HIGH);
+                yaoKong = 0;
+                tingZhi = 2;
+                break;
+               case 3:
+                switch(tingZhi ){
+                  case 1:
+                    digitalWrite(3, LOW);
+                    delay(1000); 
+                    digitalWrite(3, HIGH);
+                    tingZhi = 0;
+                    break;
+                  case 2:
+                    digitalWrite(4, LOW);
+                    delay(1000); 
+                    digitalWrite(4, HIGH);
+                    tingZhi = 0;
+                    break;                                       
+                }
+                break;
             }
-            else if (yaoKong == 2){
-               mySwitch.send(7047684, 24);
-            }
-            else
-               mySwitch.send(7047688, 24); 
         }
         else {
             token = strtok( NULL, seps );      

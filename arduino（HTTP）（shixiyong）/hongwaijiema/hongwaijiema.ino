@@ -12,8 +12,8 @@ void loop() {
     if (irrecv.decode(&results)) {
     Serial.println(results.value, HEX);//以16进制换行输出接收代码
     //results.value 是unsigned long型，头文件有介绍 
-//    Serial.print(",  bits: ");
-//    Serial.println(results.bits);
+    Serial.print(",  bits: ");
+    Serial.println(results.bits);
     irrecv.resume(); // 接收下一个值
   }
   delay(600);

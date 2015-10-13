@@ -2,12 +2,11 @@ unsigned long lastConnectionTime = 0;
 const unsigned long postingInterval = 30000;
 boolean ResponseBegin = false;
 String returnValue = ""; 
-String a = "";
-int kaiGuan ;
+
 void setup() {  //设置单片机初始状态
   // put your setup code here, to run once:
     Serial.begin(9600);  //设置串口波特率
-    pinMode(9,OUTPUT);   //门禁必须接到单片机9脚
+    pinMode(3,OUTPUT);   //门禁必须接到单片机9脚
     getData();
 }
 void loop() {
@@ -27,11 +26,11 @@ void loop() {
       }
    }   
    if (returnValue.length()!=0 && (ResponseBegin == false)){  //根据相应的指令完成门禁的开关
-      if (returnValue.charAt(returnValue.length() - 1) == '1' && (digitalRead(9) == LOW) ){ 
-         digitalWrite(9, HIGH);        
+      if (returnValue.charAt(returnValue.length() - 1) == '1' && (digitalRead(3) == LOW) ){ 
+         digitalWrite(3, HIGH);        
       }
       else if(returnValue.charAt(returnValue.length() - 1 ) == '0' ) {
-         digitalWrite(9, LOW);      
+         digitalWrite(3, LOW);      
       }  
       returnValue = ""; 
    }
