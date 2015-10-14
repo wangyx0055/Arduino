@@ -6,13 +6,18 @@ void setup() {    //设置单片机初始状态
   // put your setup code here, to run once:
     Serial.begin(9600);
     pinMode(3,OUTPUT);//灯必须接到单片机3脚
+    pinMode(4,INPUT);
+    digitalWrite (4,HIGH);
     getData();
 }
 void loop() {
    if(millis() - lastConnectionTime > postingInterval){   //wifi节点关闭后，重新开启节点
      getData();
    }
-   
+   if (digitalRead (4) == LOW)
+   {
+    putData;
+   }
    if (Serial.available()) {    //读取并处理wifi板得到的服务器指令
       char c = Serial.read();   
       if (c == '{') {
@@ -38,6 +43,10 @@ void loop() {
 }
 void getData(void) {     //设置wifi板节点，连接服务器
   Serial.println("dofile(\"mqtt.lua\")"); 
+  lastConnectionTime = millis();
+}
+void putData(void) {     //设置wifi板节点，连接服务器
+  Serial.println("dofile(\"gas.lua\")"); 
   lastConnectionTime = millis();
 }
 
